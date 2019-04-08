@@ -1,15 +1,34 @@
 package com.thiscosta.startuplanches.model;
 
-import java.util.Set;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-public class Compra {
+public class Compra{
+	
+	public Compra() {}
+	
+	public Compra(Long id, double preco, List<CompraLanche> lanchesCompra) {
+		this.id = id;
+		this.preco = preco;
+		this.lanchesCompra = lanchesCompra;
+	}
+	
+	public Compra(Long id, double preco, List<CompraLanche> lanchesCompra, List<PromocaoCompra> promocoesCompra) {
+		this.id = id;
+		this.preco = preco;
+		this.lanchesCompra = lanchesCompra;
+		this.promocoesCompra = promocoesCompra;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +36,14 @@ public class Compra {
 	
 	private double preco;
 	
-	@OneToMany(mappedBy = "compra")
-	Set<CompraLanche> lanches;
+	@NotEmpty
+	@JsonIgnoreProperties("compra")
+	@OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CompraLanche> lanchesCompra;
+	
+	@JsonIgnoreProperties("compra")
+	@OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<PromocaoCompra> promocoesCompra;
 
 	public Long getId() {
 		return id;
@@ -34,6 +59,25 @@ public class Compra {
 
 	public void setPreco(double preco) {
 		this.preco = preco;
+	}
+
+	public void incrementarPreco(double preco){
+		this.preco += preco;
+	}
+
+	public List<CompraLanche> getLanchesCompra() {
+		return this.lanchesCompra;
+	}
+	public void setLanchesCompra(List<CompraLanche> lanchesCompra) {
+		this.lanchesCompra = lanchesCompra;
+	}
+
+	public List<PromocaoCompra> getPromocoesCompra() {
+		return promocoesCompra;
+	}
+
+	public void setPromocoesCompra(List<PromocaoCompra> promocoesCompra) {
+		this.promocoesCompra = promocoesCompra;
 	}
 
 	@Override

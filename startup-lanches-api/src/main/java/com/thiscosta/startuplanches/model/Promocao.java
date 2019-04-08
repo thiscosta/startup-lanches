@@ -1,12 +1,31 @@
 package com.thiscosta.startuplanches.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Promocao {
+	
+	public Promocao() {}
+	
+	public Promocao(String nome, String descricao) {
+		this.nome = nome;
+		this.descricao = descricao;
+	}
+	
+	public Promocao(Long id,  String nome, String descricao) {
+		this.id = id;
+		this.nome = nome;
+		this.descricao = descricao;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +35,9 @@ public class Promocao {
 	
 	private String descricao;
 	
-	private double preco;
+	@JsonIgnoreProperties("promocao")
+	@OneToMany(mappedBy = "promocao", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<PromocaoCompra> promocoesCompra;
 
 	public Long getId() {
 		return id;
@@ -42,12 +63,12 @@ public class Promocao {
 		this.descricao = descricao;
 	}
 
-	public double getPreco() {
-		return preco;
+	public List<PromocaoCompra> getPromocoesCompra() {
+		return promocoesCompra;
 	}
 
-	public void setPreco(double preco) {
-		this.preco = preco;
+	public void setPromocoesCompra(List<PromocaoCompra> promocoesCompra) {
+		this.promocoesCompra = promocoesCompra;
 	}
 
 	@Override

@@ -1,24 +1,39 @@
 package com.thiscosta.startuplanches.model;
 
-import java.util.Set;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 @Entity
 public class Ingrediente {
+
+	public Ingrediente(){}
+
+	public Ingrediente(String nome, double preco){
+		this.nome = nome;
+		this.preco = preco;
+	}
+	
+	public Ingrediente(Long id, String nome, double preco){
+		this.id = id;
+		this.nome = nome;
+		this.preco = preco;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(unique = true)
+	@NotBlank(message = "O ingrediente deve ter um nome")
 	private String nome;
-	
-	@OneToMany(mappedBy = "ingrediente")
-	private Set<LancheIngrediente> lanches;
+
+	@Positive(message = "O ingrediente deve ter um preço válido")
+	private double preco;
 	
 	public Long getId() {
 		return id;
@@ -36,12 +51,11 @@ public class Ingrediente {
 		this.nome = nome;
 	}
 
-	public Set<LancheIngrediente> getLanches() {
-		return lanches;
+	public double getPreco() {
+		return this.preco;
 	}
-
-	public void setLanches(Set<LancheIngrediente> lanches) {
-		this.lanches = lanches;
+	public void setPreco(double preco) {
+		this.preco = preco;
 	}
 
 	@Override

@@ -8,4 +8,6 @@ import com.thiscosta.startuplanches.model.Lanche;
 @Repository
 public interface LancheRepository extends JpaRepository<Lanche, Long> {
 
+    Lanche findByNome(String nome);
+
 }

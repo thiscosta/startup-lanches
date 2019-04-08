@@ -8,4 +8,6 @@ import com.thiscosta.startuplanches.model.Promocao;
 @Repository
 public interface PromocaoRepository extends JpaRepository<Promocao, Long> {
 
+	Promocao findByNome(String nome);
+	
 }

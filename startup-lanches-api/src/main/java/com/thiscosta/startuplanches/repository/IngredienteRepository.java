@@ -8,4 +8,6 @@ import com.thiscosta.startuplanches.model.Ingrediente;
 @Repository
 public interface IngredienteRepository extends JpaRepository<Ingrediente, Long> {
 
+    Ingrediente findByNome(String nome);
+
 }

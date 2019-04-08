@@ -10,6 +10,21 @@ import javax.persistence.ManyToOne;
 @Entity
 public class CompraLanche {
 
+	public CompraLanche(){}
+
+	public CompraLanche(Compra compra, Lanche lanche, Integer quantidade){
+		this.compra = compra;
+		this.lanche = lanche;
+		this.quantidade = quantidade;
+	}
+	
+	public CompraLanche(Long id, Compra compra, Lanche lanche, Integer quantidade){
+		this.id = id;
+		this.compra = compra;
+		this.lanche = lanche;
+		this.quantidade = quantidade;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -21,6 +36,8 @@ public class CompraLanche {
 	@ManyToOne
 	@JoinColumn(name = "lanche_id")
 	private Lanche lanche;
+
+	private Integer quantidade;
 
 	public Long getId() {
 		return id;
@@ -44,6 +61,13 @@ public class CompraLanche {
 
 	public void setLanche(Lanche lanche) {
 		this.lanche = lanche;
+	}
+
+	public Integer getQuantidade() {
+		return this.quantidade;
+	}
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
 	}
 
 	@Override

@@ -9,6 +9,21 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class LancheIngrediente {
+
+	public LancheIngrediente(){}
+
+	public LancheIngrediente(Lanche lanche, Ingrediente ingrediente, Integer quantidade){
+		this.lanche = lanche;
+		this.ingrediente = ingrediente;
+		this.quantidade =  quantidade;
+	}
+	
+	public LancheIngrediente(Long id, Lanche lanche, Ingrediente ingrediente, Integer quantidade){
+		this.id = id;
+		this.lanche = lanche;
+		this.ingrediente = ingrediente;
+		this.quantidade =  quantidade;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
