@@ -34,10 +34,6 @@ public class Promocao {
 	private String nome;
 	
 	private String descricao;
-	
-	@JsonIgnoreProperties("promocao")
-	@OneToMany(mappedBy = "promocao", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<PromocaoCompra> promocoesCompra;
 
 	public Long getId() {
 		return id;
@@ -61,14 +57,6 @@ public class Promocao {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-
-	public List<PromocaoCompra> getPromocoesCompra() {
-		return promocoesCompra;
-	}
-
-	public void setPromocoesCompra(List<PromocaoCompra> promocoesCompra) {
-		this.promocoesCompra = promocoesCompra;
 	}
 
 	@Override

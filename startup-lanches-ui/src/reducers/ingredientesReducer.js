@@ -3,18 +3,16 @@ import { createAction } from 'redux-actions'
 
 export const CARREGAR_LISTA_INGREDIENTES = defineAction('CARREGAR_LISTA_INGREDIENTES', ['START', 'SUCCESS'], 'CARREGAR A LISTA DE INGREDIENTES')
 export const ALERTAR_ERRO = defineAction('ALERTAR_ERRO', ['ALERT', 'DISMISS'], 'ALERTAR O ERRO AO USUÁRIO')
+export const ALTERAR_CONTEUDO_PRONTO_INGREDIENTE = defineAction('ALTERAR_CONTEUDO_PRONTO_INGREDIENTE', ['SWITCH'], 'ALTERAR CONTEUDO ESTA PRONTO DO REDUCER')
 
 export const carregarListaIngredientes = createAction(CARREGAR_LISTA_INGREDIENTES.START)
 export const carregouListaIngredientes = createAction(CARREGAR_LISTA_INGREDIENTES.SUCCESS)
 
-export const alertarErro = createAction(ALERTAR_ERRO.ALERT)
-export const fecharErro = createAction(ALERTAR_ERRO.DISMISS)
+export const alterarConteudoProntoIngrediente = createAction(ALTERAR_CONTEUDO_PRONTO_INGREDIENTE.SWITCH)
 
 const initialState = {
     listaIngredientes: [],
-    conteudoEstaPronto: true,
-    erro: '',
-    temErro: true
+    conteudoEstaPronto: true
 }
 
 export default function ingredientesReducer(state = initialState, action) {
@@ -30,18 +28,10 @@ export default function ingredientesReducer(state = initialState, action) {
                 listaIngredientes: action.payload.ingredientes,
                 conteudoEstaPronto: true
             }
-        case ALERTAR_ERRO.ALERT:
+        case ALTERAR_CONTEUDO_PRONTO_INGREDIENTE.SWITCH:
             return {
                 ...state,
-                conteudoEstaPronto: true,
-                erro: action.payload.erro,
-                temErro: true
-            }
-        case ALERTAR_ERRO.DISMISS:
-            return {
-                ...state,
-                erro: '',
-                temErro: false
+                conteudoEstaPronto: !state.conteudoEstaPronto
             }
         default:
             return state

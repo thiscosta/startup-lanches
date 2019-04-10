@@ -10,7 +10,7 @@ import routes from './routes'
 import Header from './components/Header'
 import Rodape from './components/Rodape'
 
-import { BrowserRouter as Router, Route } from "react-router-dom"
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom"
 
 // mandatory
 import 'react-s-alert/dist/s-alert-default.css';
@@ -18,6 +18,7 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/flip.css';
 
 class App extends Component {
+
   render() {
     return (
       <Provider store={store}>
@@ -29,6 +30,7 @@ class App extends Component {
                   <Route key={i} path={route.path} component={route.component} />
                 )
               })}
+              <Route exact path="/" render={() => (<Redirect to="/cardapio" />)} /> 
             </Header>
             <Alert stack={{limit: 3}} />
           <Rodape />

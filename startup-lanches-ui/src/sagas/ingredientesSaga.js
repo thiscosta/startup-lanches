@@ -1,9 +1,11 @@
-import { takeEvery,  call, put } from 'redux-saga/effects'
+import { takeEvery, call, put } from 'redux-saga/effects'
 
 import {
     CARREGAR_LISTA_INGREDIENTES, carregouListaIngredientes,
-    alertarErro
+    alterarConteudoProntoIngrediente
 } from '../reducers/ingredientesReducer'
+
+import { alertarErro } from '../reducers/mensagemReducer'
 
 import IngredientesService from '../services/ingredientesService'
 
@@ -13,13 +15,16 @@ function* carregarListaIngredientes() {
     try {
 
         const result = yield call(IngredientesService.listarIngredientes)
-        if (Array.isArray(result))
-            yield put(carregouListaIngredientes({ ingredientes: result }))
-        else
-            throw new Error("Falha ao carregar lista de ingredientes")
+        if (result.success)
+            yield put(carregouListaIngredientes({ ingredientes: result.data }))
+        else {
+            yield put(alertarErro({ erro: 'Falha ao obter ingredientes do servidor. Por favor, tente novamente.' }))
+            yield put(alterarConteudoProntoIngrediente())
+        }
     }
     catch (erro) {
-        yield put(alertarErro({ erro: erro }))
+        yield put(alertarErro({ erro: 'Falha ao obter ingredientes do servidor. Por favor, tente novamente.' }))
+        yield put(alterarConteudoProntoIngrediente())
     }
 }
 

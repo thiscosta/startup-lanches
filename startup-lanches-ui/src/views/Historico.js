@@ -89,7 +89,9 @@ class Historico extends React.Component {
 }
 
 const mapStateToProps = store => ({
-    compras: store.compras.listaCompras
+    compras: store.compras.listaCompras,
+    mensagemErro: store.mensagens.erro,
+    temErro: store.mensagens.temErro
 })
 
 const mapDispatchToProps = {

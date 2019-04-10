@@ -135,7 +135,7 @@ public class CompraService {
 
 			return ResponseEntity.ok().body(repository.getOne(compra.getId()));
 		} catch (Exception e) {
-			return ResponseEntity.badRequest().body(new ErrorObject(false, e.toString()));
+			return ResponseEntity.badRequest().body(new ErrorObject(false, e.getMessage()));
 		}
 	}
 

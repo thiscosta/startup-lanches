@@ -3,12 +3,15 @@ import { takeEvery, call, put } from 'redux-saga/effects'
 import {
     COMPRAR_LANCHE, comprouLanche,
     CARREGAR_LISTA_COMPRAS, carregouListaCompras,
-    alertarErro
+    alterarConteudoProntoCompra
 } from '../reducers/comprasReducer'
 
 import {
     verificarLancheExiste
 } from '../reducers/lanchesReducer'
+
+import { alertarErro } from '../reducers/mensagemReducer'
+
 
 import ComprasService from '../services/comprasService'
 
@@ -18,33 +21,40 @@ import ComprasService from '../services/comprasService'
 function* comprarLanche(action) {
     try {
         const result = yield call(ComprasService.comprarLanche, action.payload.compra)
-        if (result.hasOwnProperty('id')) {
-            yield put(comprouLanche({ compra: result }))
-            let lancheComprado = result.lanchesCompra[0].lanche
+        if (result.success) {
+            yield put(comprouLanche({ compra: result.data }))
+            let lancheComprado = result.data.lanchesCompra[0].lanche
             yield put(verificarLancheExiste({ lanche: lancheComprado }))
         }
 
-        else
-            throw new Error("Falha ao inserir compra")
+        else {
+            yield put(alertarErro({ erro: 'Falha ao comprar lanche. Por favor, tente novamente.' }))
+            yield put(alterarConteudoProntoCompra())
+        }
+
     }
     catch (erro) {
-        yield put(alertarErro({ erro: erro }))
+        yield put(alertarErro({ erro: 'Falha ao comprar lanche. Por favor, tente novamente.' }))
+        yield put(alterarConteudoProntoCompra())
     }
 }
 
 function* carregarListaCompras() {
     try {
-
         const result = yield call(ComprasService.carregarListaCompras)
-        if (Array.isArray(result)){
-            result.sort((a, b) => b.id - a.id);
-            yield put(carregouListaCompras({ compras: result }))
+        console.log('result do ', result)
+        if (result.success) {
+            result.data.sort((a, b) => b.id - a.id);
+            yield put(carregouListaCompras({ compras: result.data }))
         }
-        else
-            throw new Error("Falha ao carregar lista de compras")
+        else{
+            yield put(alertarErro({ erro: 'Falha ao obter compras do servidor. Por favor, tente novamente.' }))
+            yield put(alterarConteudoProntoCompra())
+        }
     }
     catch (erro) {
-        yield put(alertarErro({ erro: erro }))
+        yield put(alertarErro({ erro: 'Falha ao obter compras do servidor. Por favor, tente novamente.' }))
+        yield put(alterarConteudoProntoCompra())
     }
 }
 

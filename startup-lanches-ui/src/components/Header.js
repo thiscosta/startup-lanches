@@ -2,13 +2,24 @@ import React from 'react'
 
 import { Link, withRouter } from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap'
+import { connect } from 'react-redux'
+
+import Alert from 'react-s-alert';
 
 class Header extends React.Component {
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.mensagemErro !== this.props.mensagemErro) {
+            Alert.error(this.props.mensagemErro, {
+                effect: 'flip'
+            });
+        }
+    }
 
     render() {
         return (
             <div>
-                <Navbar collapseOnSelect expand="lg" variant="dark"
+                <Navbar collapseOnSelect={true} expand="lg" variant="dark"
                     style={{ backgroundColor: '#981C1E' }}>
 
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -26,7 +37,9 @@ class Header extends React.Component {
                                 <i className="fab fa-elementor" style={{ fontSize: 32 }}></i>
                                 Cardápio
                         </Link>
-                            <Nav.Link>
+                            <Link to="/cardapio" style={{
+                                textDecoration: 'none'
+                            }}>
                                 <Navbar.Brand href="#home" style={{
                                     display: 'flex', justifyContent: 'center',
                                     marginLeft: 35, marginRight: 30, fontSize: 35, flexDirection: 'column',
@@ -35,7 +48,7 @@ class Header extends React.Component {
                                     <i className="fas fa-hamburger"></i>
                                     Super Lanches
                                 </Navbar.Brand>
-                            </Nav.Link>
+                            </Link>
                             <Link to="/historico" style={{
                                 textDecoration: 'none', fontSize: 20,
                                 display: 'flex', flexDirection: 'column',
@@ -43,8 +56,9 @@ class Header extends React.Component {
                                 transition: 'all 0.3s'
                             }}>
                                 <i className="fas fa-history" style={{ fontSize: 32 }}></i>
-                                Histórico
-                        </Link>
+                                <Nav.Item  onSelect={function() {}}>Histórico</Nav.Item>
+                                
+                            </Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
@@ -55,4 +69,12 @@ class Header extends React.Component {
     }
 }
 
-export default withRouter(Header);
+const mapStateToProps = store => ({
+    mensagemErro: store.mensagens.erro,
+    temErro: store.mensagens.temErro
+})
+
+const mapDispatchToProps = {
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

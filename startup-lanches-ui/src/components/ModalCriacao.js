@@ -272,7 +272,7 @@ class ModalCriacao extends React.Component {
     }
 
     async componentDidUpdate(prevProps, prevState) {
-        if (prevProps.compraEfetuada !== this.props.compraEfetuada) {
+        if (prevProps.compraEfetuada !== this.props.compraEfetuada && this.props.estaCriando) {
             this.props.mudarVisibilidadeCriacao()
             await this.setState({
                 qtdAlface: 0,

@@ -3,7 +3,6 @@ import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 
 export default class Rodape extends React.Component {
-
     render() {
         return (
             <Container fluid style={{

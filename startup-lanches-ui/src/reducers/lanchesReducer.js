@@ -6,7 +6,7 @@ export const COMPRAR_LANCHE = defineAction('COMPRAR_LANCHE', ['START', 'SUCCESS'
 export const SELECIONAR_LANCHE = defineAction('SELECIONAR_LANCHE', ['SELECT'], 'SELECIONAR LANCHE')
 export const MODAL_CRIACAO = defineAction('MODAL_CRIACAO', ['TOGGLE'], 'MUDAR VISIBILIDADE DO MODAL DE CRIAÇÃO DE LANCHE')
 export const VERIFICAR_EXISTENCIA_LANCHE = defineAction('VERIFICAR_EXISTENCIA_LANCHE', ['CHECK'], 'VERIFICA SE O LANCHE QUE FOI COMPRADO EXISTE')
-export const ALERTAR_ERRO = defineAction('ALERTAR_ERRO', ['ALERT', 'DISMISS'], 'ALERTAR O ERRO AO USUÁRIO')
+export const ALTERAR_CONTEUDO_PRONTO_LANCHE = defineAction('ALTERAR_CONTEUDO_PRONTO_LANCHE', ['SWITCH'], 'ALTERAR CONTEUDO ESTA PRONTO DO REDUCER')
 
 export const carregarListaLanches = createAction(CARREGAR_LISTA_LANCHES.START)
 export const carregouListaLanches = createAction(CARREGAR_LISTA_LANCHES.SUCCESS)
@@ -15,10 +15,9 @@ export const selecionarLanche = createAction(SELECIONAR_LANCHE.SELECT)
 
 export const mudarVisibilidadeCriacao = createAction(MODAL_CRIACAO.TOGGLE)
 
-export const verificarLancheExiste = createAction(VERIFICAR_EXISTENCIA_LANCHE.CHECK)
+export const alterarConteudoProntoLanche = createAction(ALTERAR_CONTEUDO_PRONTO_LANCHE.SWITCH)
 
-export const alertarErro = createAction(ALERTAR_ERRO.ALERT)
-export const fecharErro = createAction(ALERTAR_ERRO.DISMISS)
+export const verificarLancheExiste = createAction(VERIFICAR_EXISTENCIA_LANCHE.CHECK)
 
 const initialState = {
     listaLanches: [],
@@ -45,19 +44,6 @@ export default function lanchesReducer(state = initialState, action) {
                 ...state,
                 estaCriando: !state.estaCriando
             }
-        case ALERTAR_ERRO.ALERT:
-            return {
-                ...state,
-                conteudoEstaPronto: true,
-                erro: action.payload.erro,
-                temErro: true
-            }
-        case ALERTAR_ERRO.DISMISS:
-            return {
-                ...state,
-                erro: '',
-                temErro: false
-            }
         case SELECIONAR_LANCHE.SELECT:
             return {
                 ...state,
@@ -80,6 +66,11 @@ export default function lanchesReducer(state = initialState, action) {
                 ...state,
                 listaLanches: novaListaLanches,
                 conteudoEstaPronto: true
+            }
+        case ALTERAR_CONTEUDO_PRONTO_LANCHE.SWITCH:
+            return {
+                ...state,
+                conteudoEstaPronto: !state.conteudoEstaPronto
             }
         default:
             return state

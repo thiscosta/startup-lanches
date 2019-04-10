@@ -2,8 +2,10 @@ import { takeEvery, call, put } from 'redux-saga/effects'
 
 import {
     CARREGAR_LISTA_LANCHES, carregouListaLanches,
-    alertarErro
+    alterarConteudoProntoLanche
 } from '../reducers/lanchesReducer'
+
+import { alertarErro } from '../reducers/mensagemReducer'
 
 import LanchesService from '../services/lanchesService'
 
@@ -14,13 +16,16 @@ function* loadListLanches() {
     try {
         //yield call()
         const result = yield call(LanchesService.listarLanches)
-        if (Array.isArray(result))
-            yield put(carregouListaLanches({ listaLanches: result }))
-        else
-            throw new Error("Falha ao resgatar lanches")
+        if (result.success)
+            yield put(carregouListaLanches({ listaLanches: result.data }))
+        else{
+            yield put(alertarErro({ erro: 'Falha ao obter lanches do servidor. Por favor, tente novamente.' }))
+            yield put(alterarConteudoProntoLanche())
+        }
     }
     catch (erro) {
-        yield put(alertarErro({ erro: erro }))
+        yield put(alertarErro({ erro: 'Falha ao obter lanches do servidor. Por favor, tente novamente.' }))
+        yield put(alterarConteudoProntoLanche())
     }
 }
 

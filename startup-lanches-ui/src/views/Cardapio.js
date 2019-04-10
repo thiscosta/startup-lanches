@@ -7,7 +7,7 @@ import CardLanche from '../components/CardLanche'
 
 import { connect } from 'react-redux'
 
-import { carregarListaLanches, fecharErro, selecionarLanche, mudarVisibilidadeCriacao } from '../reducers/lanchesReducer'
+import { carregarListaLanches,  selecionarLanche, mudarVisibilidadeCriacao } from '../reducers/lanchesReducer'
 import ModalCompra  from '../components/ModalCompra'
 import ModalCriacao from '../components/ModalCriacao';
 
@@ -16,7 +16,6 @@ class Cardapio extends React.Component {
     constructor(props) {
         super(props)
 
-        this.fecharModal = this.fecharModal.bind(this)
         this.carregarCardapio = this.carregarCardapio.bind(this)
         this.selecionarLanche = this.selecionarLanche.bind(this)
     }
@@ -29,10 +28,6 @@ class Cardapio extends React.Component {
         this.carregarCardapio()
     }
 
-    fecharModal() {
-        this.props.fecharErro();
-    }
-
     selecionarLanche(lanche) {
         this.props.selecionarLanche({ lanche })
         console.log('selecionou o lanche :', lanche)
@@ -42,28 +37,6 @@ class Cardapio extends React.Component {
         return (
             <div>
                 <ModalCompra visible={this.props.lancheSelecionado != null ? true : false} />
-                
-                <Modal
-                    show={this.props.temErro}
-                    onHide={this.props.fecharErro}
-                    size="lg"
-                    aria-labelledby="contained-modal-title-vcenter"
-                    centered
-                >
-                    <Modal.Header closeButton>
-                        <Modal.Title id="contained-modal-title-vcenter">
-                            Alerta de erro
-                    </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>
-                            {this.props.mensagemErro}
-                        </p>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={this.props.fecharErro}>Fechar</Button>
-                    </Modal.Footer>
-                </Modal>
 
                 <ModalCriacao /> 
 
@@ -130,8 +103,8 @@ class Cardapio extends React.Component {
 const mapStateToProps = store => ({
     cardapio: store.lanches.listaLanches,
     tamanhoCardapio: store.lanches.listaLanches.length,
-    mensagemErro: store.lanches.erro,
-    temErro: store.lanches.temErro,
+    mensagemErro: store.mensagens.erro,
+    temErro: store.mensagens.temErro,
     conteudoEstaPronto: store.lanches.conteudoEstaPronto,
     lancheSelecionado: store.lanches.lancheSelecionado,
     estaCriando: store.lanches.estaCriando
@@ -139,7 +112,6 @@ const mapStateToProps = store => ({
 
 const mapDispatchToProps = {
     carregarListaLanches,
-    fecharErro,
     selecionarLanche,
     mudarVisibilidadeCriacao
 }

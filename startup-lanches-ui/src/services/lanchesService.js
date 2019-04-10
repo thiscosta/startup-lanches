@@ -1,16 +1,22 @@
 const axios = require('axios');
 
+const returnObject = {
+    success: null,
+    data: ''
+}
 
 const LanchesService = {
 
     async listarLanches() {
-        let lanches
+        let lanches = returnObject
         await axios.get('http://localhost:8080/lanches')
             .then(function (response) {
-                lanches = response.data
+                lanches.success = true
+                lanches.data = response.data
             })
             .catch(function (error) {
-                lanches = error
+                lanches.success = false
+                lanches.data = error
             })
 
         return lanches

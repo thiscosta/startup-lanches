@@ -43,7 +43,7 @@ export default class CardLanche extends React.Component {
                             display:'flex', flexDirection: 'row', justifyContent: 'space-between',
                              alignItems: 'center'
                         }}>
-                            Preço: R${this.props.lanche.preco} 
+                            Preço: R${this.props.lanche.preco.toFixed(2)} 
                             <Button variant="outline-light" onClick={this.props.comprarLanche}>Comprar</Button>
                         </Card.Text>
                     </Card.Footer>
