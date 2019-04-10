@@ -230,7 +230,7 @@ public class CompraService {
 
 	public double aplicarPromocoes(Lanche lanche, List<Ingrediente> ingredientes, double valorAtual, Compra compra) {
 
-		double valorDesconto = 0.0;
+		double valorDesconto = 0;
 		
 		List<Promocao> promocoes = promocaoService.listarPromocoes();
 		
