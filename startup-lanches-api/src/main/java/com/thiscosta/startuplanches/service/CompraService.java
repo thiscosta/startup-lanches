@@ -91,12 +91,8 @@ public class CompraService {
 			compra.setPreco(0);
 			compra.setPromocoesCompra(new ArrayList<PromocaoCompra>());
 
-			System.out.println("Limpou o preço e as promoções");
-			
 			// Calcula o preço unitário de cada lanche da compra
 			List<CompraLanche> lanchesCompra = new ArrayList<>(compra.getLanchesCompra());
-			System.out.println("Setou o lanchesCompra como sendo o getLanchesCompra()");
-			System.out.println("Tamanho do array de lanches compra: "+lanchesCompra.size());
 			for (int i = 0; i < lanchesCompra.size(); i++) {
 				/*
 				 * Incrementa o valor total da compra com o valor unitário de cada lanche da
@@ -104,19 +100,14 @@ public class CompraService {
 				 * exista)
 				 */
 				lanchesCompra.get(i).setCompra(compra);
-				System.out.println("Setou a compra do lanches compra");
 				compra.incrementarPreco(this.valorCompraLanche(lanchesCompra.get(i)));
 			}
 
-			System.out.println("Setando o novo preço da compra");
 			compra.setPreco(compra.getPreco());
 
-			System.out.println("preço da compra: " + compra.getPreco());
 			// Salva a compra
 
 			compra = repository.save(compra);
-
-			System.out.println("salvou a compra\n ID: "+compra.getId());
 
 			// Salva os lanches da compra
 			for (CompraLanche compraLanche : compra.getLanchesCompra()) {
@@ -124,15 +115,11 @@ public class CompraService {
 				compraLancheService.novaCompraLanche(compraLanche);
 			}
 			
-			System.out.println("Passou do compraLancheService: "+compra.getLanchesCompra().get(0).getCompra().getId());
-
 			for(PromocaoCompra promocaoCompra : compra.getPromocoesCompra()) {
-				System.out.println("Entrou no promocaoCompra");
 				promocaoCompra.setCompra(compra);
 				promocaoCompraService.novaPromocaoCompra(promocaoCompra);
 			}
-			System.out.println("Passou do promocaoCompraService: "+compra.getPromocoesCompra().size());
-
+			
 			return ResponseEntity.ok().body(repository.getOne(compra.getId()));
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(new ErrorObject(false, e.getMessage()));
@@ -141,54 +128,40 @@ public class CompraService {
 
 	public double valorCompraLanche(CompraLanche lancheCompra) {
 		
-		System.out.println("Chegou no valorCompraLanche");
 		double valorFinal = 0;
 
 		// Armazena todos os ingredientes em memória para não ficar procurando no banco
 		// de dados.
 		List<Ingrediente> ingredientes = ingredienteService.listarIngredientes();
-		System.out.println("Listou os ingredientes "+ingredientes.size());
 		Lanche lanche = lancheCompra.getLanche();
-		System.out.println("pegou o lanche da compra: "+lanche.getNome());
-
+		
 		Long idLanche = lanche.getId();
 		// Verifica se existe um lanche com o nome passado.
 		if (idLanche == null) {
-			System.out.println("Lanche não existe");
-			System.out.println("Ingredientes do lanche: "+lanche.getIngredientes().size());
 			// Caso exista, verifica se foram passados os ingredientes do lanche
 			if (lanche.getIngredientes().size() > 0) {
 				// Percorre todos os lanches da compra de acordo com a quantidade
 				double valorLanche = 0;
 
-				System.out.println("Não há um lanche com o nome");
-
 				// Pega todos os ingredientes do lanche
 				List<LancheIngrediente> ingredientesLanche = lanche.getIngredientes();
-				System.out.println("ingredientes do lanche: "+ingredientesLanche.size());
 				
 				// Percorre todos os ingredientes do lanche
 				for (LancheIngrediente ingredienteLanche : ingredientesLanche) {
 
-					System.out.println("Ingrediente " + ingredienteLanche.getIngrediente().getNome() + " do lanche");
 					// Incrementa no valor total o valor do ingrediente encontrado somado com sua
 					// quantidade no lanche
 					for (Ingrediente ingrediente : ingredientes) {
 						if (ingrediente.getId() == ingredienteLanche.getIngrediente().getId()) {
-							System.out.println("ID do ingrediente JPA: "+ingrediente.getId()+", ID IngredienteLanche "+ingredienteLanche.getIngrediente().getId());
-							System.out.println("\nO ingrediente(JPA) "+ingrediente.getNome()+" está com o preço R$"+ingrediente.getPreco());
 							valorLanche += ingrediente.getPreco() * ingredienteLanche.getQuantidade();
 							ingredienteLanche.setIngrediente(ingrediente);
 						}
 					}
-					System.out.println("Valor do lanche " + lanche.getNome() + "\n R$" + valorLanche);
 				}
 
 				// cria um novo lanche e adiciona no atributo lanche do objeto CompraLanche
 				Lanche novoLanche = lancheService.novoLanche(new Lanche(lanche.getNome(), valorLanche));
 				
-				System.out.println("Novo lanche criado: "+novoLanche.getId());
-
 				for (LancheIngrediente ingredienteLanche : ingredientesLanche) {
 					ingredienteLanche.setLanche(novoLanche);
 					lancheIngredienteService.novoLancheIngrediente(ingredienteLanche);
@@ -199,7 +172,6 @@ public class CompraService {
 
 				// Aplicar descontos de promoções
 				valorLanche = valorLanche - aplicarPromocoes(lanche, ingredientes, valorLanche, lancheCompra.getCompra());
-				System.out.println("Valor do lanche após promoções: R$" + valorLanche + "\n\n");
 				
 				// Incrementar o valor final do CompraLanche
 				valorFinal += valorLanche * lancheCompra.getQuantidade();
@@ -214,13 +186,11 @@ public class CompraService {
 			lanche = lancheService.verLanche(lanche.getId());
 			if (lanche == null)
 				throw new RuntimeException("Não foi encontrado um lanche com o ID fornecido.");
-			System.out.println("Lanche já existe: " + lanche.getId());
 			lancheCompra.setLanche(lanche);
 			valorFinal += valorDoLanche(lanche, ingredientes, lancheCompra.getCompra()) * lancheCompra.getQuantidade();
 		}
 
-		System.out.println("\n\nValor final da CompraLanche:  R$" + valorFinal);
-
+		
 		return valorFinal;
 	}
 
@@ -233,8 +203,6 @@ public class CompraService {
 		double valorDesconto = 0;
 		
 		List<Promocao> promocoes = promocaoService.listarPromocoes();
-		
-		System.out.println("Listou as promoções: "+promocoes.size());
 
 		// Promoção light
 		boolean temAlface = false;
@@ -249,9 +217,7 @@ public class CompraService {
 		int porcoesQueijoDescontadas = 0;
 
 		for (LancheIngrediente lancheIngrediente : lanche.getIngredientes()) {
-			System.out.println(
-					"Iteração do LancheIngrediente das promoções: " + lancheIngrediente.getIngrediente().getNome() + "\nID: "+lancheIngrediente.getIngrediente().getId());
-
+			
 			if (lancheIngrediente.getIngrediente().getId() == ingredienteService.verIngredientePorNome("Alface")
 					.getId())
 				temAlface = true;
@@ -282,21 +248,16 @@ public class CompraService {
 		// Promoção light
 		if (temAlface && !temBacon) {
 			valorDesconto += valorAtual / 10;
-			System.out.println("Descontou 10% do valor pela Promoção Light!");
 			
 			boolean incrementou = false;
 			//Procura a promoção no array de promoções
 			for(Promocao promocao : promocoes) {
-				System.out.println("Listando a promoção "+promocao.getNome());
 				//Caso ache, verifica se ela já foi aplicada à compra
 				if(promocao.getNome().equals("Light")) {
-					System.out.println("Está na promoção light");
 					if(compra.getPromocoesCompra().size() > 0) {
-						System.out.println("Tem promoçoes na compra");
 						for(PromocaoCompra promocaoCompra : compra.getPromocoesCompra()) {
 							//Se ja foi, só incrementa o valor que foi descontado 
 							if(promocaoCompra.getPromocao().getNome().equals("Light")) {
-								System.out.println("A promoção ja foi aplicada à compra");
 								promocaoCompra.setDesconto(promocaoCompra.getDesconto() + valorDesconto);
 								incrementou = true;
 							}
@@ -304,12 +265,9 @@ public class CompraService {
 						}
 					}
 					//Caso a promoção não tenha sido aplicada à compra ainda, aplica
-					System.out.println("Chegou no incrementou == false");
 					if(incrementou == false) {
-						System.out.println("A promoção não foi aplicada à compra");
 						PromocaoCompra promocaoCompra = new PromocaoCompra(promocao, compra, valorDesconto);
 						compra.getPromocoesCompra().add(promocaoCompra);
-						System.out.println("Promoção adicionada ao array de promocoes"+compra.getPromocoesCompra().get(0).getPromocao().getNome());
 					}
 				}
 			}
@@ -320,8 +278,7 @@ public class CompraService {
 			for (Ingrediente ingrediente : ingredientes) {
 				if (ingrediente.getNome().equals("Hambúrguer de carne")) {
 					valorDesconto += porcoesCarneDescontadas * ingrediente.getPreco();
-					System.out.println("Descontou R$" + porcoesCarneDescontadas * ingrediente.getPreco()
-							+ " pela promoção de Muita carne!");
+					
 					boolean incrementou = false;
 					
 					//Procura a promoção no array de promoções
@@ -352,8 +309,6 @@ public class CompraService {
 			for (Ingrediente ingrediente : ingredientes) {
 				if (ingrediente.getNome().equals("Queijo")) {
 					valorDesconto += porcoesQueijoDescontadas * ingrediente.getPreco();
-					System.out.println("Descontou R$" + porcoesQueijoDescontadas * ingrediente.getPreco()
-							+ " pela promoção de Muito queijo!");
 					
 					boolean incrementou = false;
 					
