@@ -4,7 +4,7 @@ insert into ingrediente(nome, preco)
 values
 ('Alface', 0.40), 
 ('Bacon', 2), 
-('Hambúrguer de carne',3), 
+('Hamburguer de carne',3), 
 ('Ovo', 0.8), 
 ('Queijo', 1.5);
 

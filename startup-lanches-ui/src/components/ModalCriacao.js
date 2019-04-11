@@ -72,7 +72,7 @@ class ModalCriacao extends React.Component {
                 break
             case 'Hamburguer':
                 let hamburguer = this.props.ingredientes.filter((ingrediente) => {
-                    return ingrediente.nome === 'Hambúrguer de carne'
+                    return ingrediente.nome === 'Hamburguer de carne'
                 })[0]
                 await this.setState({
                     qtdHamburguer: this.state.qtdHamburguer + 1,
@@ -133,7 +133,7 @@ class ModalCriacao extends React.Component {
             case 'Hamburguer':
                 if (this.state.qtdHamburguer > 0) {
                     let hamburguer = this.props.ingredientes.filter((ingrediente) => {
-                        return ingrediente.nome === 'Hambúrguer de carne'
+                        return ingrediente.nome === 'Hamburguer de carne'
                     })[0]
                     await this.setState({
                         qtdHamburguer: this.state.qtdHamburguer - 1,
@@ -223,7 +223,7 @@ class ModalCriacao extends React.Component {
                         })
                     }
                     break
-                case 'Hambúrguer de carne':
+                case 'Hamburguer de carne':
                     if (this.state.qtdHamburguer > 0) {
                         listaIngredientes.push({
                             ingrediente: ingrediente,
@@ -372,7 +372,7 @@ class ModalCriacao extends React.Component {
                             <Col style={{ flex: 1, alignItems: 'center', display: 'flex' }}>
                                 <Form.Label style={{
                                     marginRight: 10
-                                }}>Hambúrguer:</Form.Label>
+                                }}>Hamburguer:</Form.Label>
                             </Col>
 
                             <Col style={{ flex: 4 }}>

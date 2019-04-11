@@ -226,7 +226,7 @@ public class CompraService {
 				temBacon = true;
 
 			if (lancheIngrediente.getIngrediente().getId() == ingredienteService
-					.verIngredientePorNome("Hambúrguer de carne").getId()) {
+					.verIngredientePorNome("Hamburguer de carne").getId()) {
 				qtdPorcoesCarne += lancheIngrediente.getQuantidade();
 				while (qtdPorcoesCarne >= 3) {
 					porcoesCarneDescontadas++;
@@ -276,7 +276,7 @@ public class CompraService {
 		// Muita carne
 		if (porcoesCarneDescontadas > 0) {
 			for (Ingrediente ingrediente : ingredientes) {
-				if (ingrediente.getNome().equals("Hambúrguer de carne")) {
+				if (ingrediente.getNome().equals("Hamburguer de carne")) {
 					valorDesconto += porcoesCarneDescontadas * ingrediente.getPreco();
 					
 					boolean incrementou = false;

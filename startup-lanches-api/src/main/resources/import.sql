@@ -1,4 +1,4 @@
-insert into ingrediente(nome, preco) values('Alface', 0.40), ('Bacon', 2), ('Hambúrguer de carne',3), ('Ovo', 0.8), ('Queijo', 1.5);
+insert into ingrediente(nome, preco) values('Alface', 0.40), ('Bacon', 2), ('Hamburguer de carne',3), ('Ovo', 0.8), ('Queijo', 1.5);
 
 insert into lanche(nome,preco) values('X-Bacon', 6.5), ('X-Burguer',4.5), ('X-Egg',5.3), ('X-Egg Bacon',7.3);
 

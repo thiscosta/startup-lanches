@@ -71,7 +71,7 @@ public class CompraServiceTest {
         
         Ingrediente alface = new Ingrediente(Long.valueOf(1),"Alface", 0.4);
         Ingrediente bacon = new Ingrediente(Long.valueOf(2),"Bacon", 2);
-        Ingrediente hamburguer = new Ingrediente(Long.valueOf(3),"Hambúrguer de carne", 3);
+        Ingrediente hamburguer = new Ingrediente(Long.valueOf(3),"Hamburguer de carne", 3);
         Ingrediente queijo = new Ingrediente(Long.valueOf(4),"Queijo", 1.5);
         Ingrediente ovo = new Ingrediente(Long.valueOf(5), "Ovo", 0.8);
         
@@ -97,7 +97,7 @@ public class CompraServiceTest {
         
         when(ingredienteService.verIngredientePorNome("Alface")).thenReturn(new Ingrediente(Long.valueOf(1),"Alface", 0.4));
         when(ingredienteService.verIngredientePorNome("Bacon")).thenReturn(new Ingrediente(Long.valueOf(2),"Bacon", 2));
-        when(ingredienteService.verIngredientePorNome("Hambúrguer de carne")).thenReturn(new Ingrediente(Long.valueOf(3),"Hambúrguer de carne", 3));
+        when(ingredienteService.verIngredientePorNome("Hamburguer de carne")).thenReturn(new Ingrediente(Long.valueOf(3),"Hamburguer de carne", 3));
         when(ingredienteService.verIngredientePorNome("Queijo")).thenReturn(new Ingrediente(Long.valueOf(4),"Queijo", 1.5));
         when(ingredienteService.verIngredientePorNome("Ovo")).thenReturn(new Ingrediente(Long.valueOf(5),"Ovo", 0.8));
 
