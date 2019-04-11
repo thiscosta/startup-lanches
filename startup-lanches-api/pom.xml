@@ -51,6 +51,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<argLine>-Dfile.encoding=UTF8</argLine>
+				</configuration>
 			</plugin>
 			<plugin>
 		      <groupId>com.spotify</groupId>
