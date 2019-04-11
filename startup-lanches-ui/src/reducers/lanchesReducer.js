@@ -54,9 +54,7 @@ export default function lanchesReducer(state = initialState, action) {
             let lanche = state.listaLanches.filter((e) => {
                 return action.payload.lanche.id === e.id
             })
-
-            console.log('lanche que ele encontrou no filter: ',lanche)
-
+            
             let novaListaLanches = state.listaLanches
 
             if(!lanche.length > 0){

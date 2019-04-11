@@ -3,16 +3,18 @@ import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Navbar, Nav } from 'react-bootstrap'
 import { connect } from 'react-redux'
+import { fecharErro } from '../reducers/mensagemReducer'
 
 import Alert from 'react-s-alert';
 
 class Header extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevProps.mensagemErro !== this.props.mensagemErro) {
+        if (prevProps.mensagemErro !== this.props.mensagemErro && this.props.mensagemErro.length > 0) {
             Alert.error(this.props.mensagemErro, {
                 effect: 'flip'
             });
+            this.props.fecharErro()
         }
     }
 
@@ -40,14 +42,14 @@ class Header extends React.Component {
                             <Link to="/cardapio" style={{
                                 textDecoration: 'none'
                             }}>
-                                <Navbar.Brand href="#home" style={{
+                                <div href="#home" style={{
                                     display: 'flex', justifyContent: 'center',
                                     marginLeft: 35, marginRight: 30, fontSize: 35, flexDirection: 'column',
-                                    alignItems: 'center'
+                                    alignItems: 'center', color: 'white'
                                 }}>
                                     <i className="fas fa-hamburger"></i>
                                     Super Lanches
-                                </Navbar.Brand>
+                                </div>
                             </Link>
                             <Link to="/historico" style={{
                                 textDecoration: 'none', fontSize: 20,
@@ -56,8 +58,8 @@ class Header extends React.Component {
                                 transition: 'all 0.3s'
                             }}>
                                 <i className="fas fa-history" style={{ fontSize: 32 }}></i>
-                                <Nav.Item  onSelect={function() {}}>Histórico</Nav.Item>
-                                
+                                <Nav.Item onSelect={function () { }}>Histórico</Nav.Item>
+
                             </Link>
                         </Nav>
                     </Navbar.Collapse>
@@ -75,6 +77,7 @@ const mapStateToProps = store => ({
 })
 
 const mapDispatchToProps = {
+    fecharErro
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

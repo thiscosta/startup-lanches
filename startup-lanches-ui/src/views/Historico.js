@@ -2,7 +2,7 @@ import React from 'react'
 
 import { connect } from 'react-redux'
 
-import { Jumbotron, Container, Row, Col, Card } from 'react-bootstrap'
+import { Jumbotron, Container, Row, Col, Card, Spinner } from 'react-bootstrap'
 
 import { carregarListaCompras } from '../reducers/comprasReducer'
 
@@ -80,7 +80,11 @@ class Historico extends React.Component {
                         display: 'flex', justifyContent: 'center', alignItems: 'center',
                         marginTop: 50
                     }}>
-                        {this.props.compras.map((e) => this.renderizarCompra(e))}
+                        {this.props.conteudoEstaPronto ?
+                            this.props.compras.map((e) => this.renderizarCompra(e))
+                            :
+                            <Spinner animation="border" variant="danger" />
+                        }
                     </Row>
                 </Container>
             </div>
@@ -90,6 +94,7 @@ class Historico extends React.Component {
 
 const mapStateToProps = store => ({
     compras: store.compras.listaCompras,
+    conteudoEstaPronto: store.compras.conteudoEstaPronto,
     mensagemErro: store.mensagens.erro,
     temErro: store.mensagens.temErro
 })

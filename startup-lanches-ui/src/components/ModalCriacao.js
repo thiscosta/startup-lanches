@@ -251,16 +251,12 @@ class ModalCriacao extends React.Component {
             }
         })
 
-        console.log('listaIngredientes: ', listaIngredientes)
-
         let lanche = {
             nome: this.state.nomeLanche,
             ingredientes: listaIngredientes
         }
 
         compra.lanchesCompra.push({ lanche: lanche, quantidade: this.state.qtdLanche })
-
-        console.log('compra: ', compra)
 
         this.props.comprarLanche({ compra })
     }

@@ -1,15 +1,18 @@
 import React from 'react'
 import {
-    Jumbotron, Container, Row, Col, Modal, Button, Spinner,
+    Jumbotron, Container, Row, Col, Button, Spinner,
     Alert
 } from 'react-bootstrap'
 import CardLanche from '../components/CardLanche'
 
+import { carregarListaIngredientes } from '../reducers/ingredientesReducer'
+
+
 import { connect } from 'react-redux'
 
-import { carregarListaLanches,  selecionarLanche, mudarVisibilidadeCriacao } from '../reducers/lanchesReducer'
-import ModalCompra  from '../components/ModalCompra'
-import ModalCriacao from '../components/ModalCriacao';
+import { carregarListaLanches, selecionarLanche, mudarVisibilidadeCriacao } from '../reducers/lanchesReducer'
+import ModalCompra from '../components/ModalCompra'
+import ModalCriacao from '../components/ModalCriacao'
 
 class Cardapio extends React.Component {
 
@@ -30,7 +33,6 @@ class Cardapio extends React.Component {
 
     selecionarLanche(lanche) {
         this.props.selecionarLanche({ lanche })
-        console.log('selecionou o lanche :', lanche)
     }
 
     render() {
@@ -38,7 +40,7 @@ class Cardapio extends React.Component {
             <div>
                 <ModalCompra visible={this.props.lancheSelecionado != null ? true : false} />
 
-                <ModalCriacao /> 
+                <ModalCriacao />
 
                 <Container fluid>
                     <Row>
@@ -86,11 +88,26 @@ class Cardapio extends React.Component {
                         <Col sm={12} style={{
                             display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: 80
                         }}>
-                            <Button variant="outline-danger" style={{
-                                fontSize: 19
-                            }} onClick={() => {
-                                this.props.mudarVisibilidadeCriacao()
-                            }}>Crie o seu próprio lanche!</Button>
+                            {this.props.conteudoIngredienteEstaPronto ?
+                                <Button variant="outline-danger" style={{
+                                    fontSize: 19
+                                }} onClick={() => {
+                                    if (Array.from(this.props.ingredientes).length > 0)
+                                        this.props.mudarVisibilidadeCriacao()
+                                    else
+                                        this.props.carregarListaIngredientes()
+
+                                }}>
+
+                                    {Array.from(this.props.ingredientes).length > 0 ?
+                                        'Crie o seu próprio lanche!' : 'Carregar a lista de ingredientes'
+
+
+                                    }
+                                </Button>
+                                :
+                                <Spinner animation="border" variant="danger" />
+                            }
                         </Col>
 
                     </Row>
@@ -106,14 +123,17 @@ const mapStateToProps = store => ({
     mensagemErro: store.mensagens.erro,
     temErro: store.mensagens.temErro,
     conteudoEstaPronto: store.lanches.conteudoEstaPronto,
+    conteudoIngredienteEstaPronto: store.ingredientes.conteudoEstaPronto,
     lancheSelecionado: store.lanches.lancheSelecionado,
-    estaCriando: store.lanches.estaCriando
+    estaCriando: store.lanches.estaCriando,
+    ingredientes: store.ingredientes.listaIngredientes
 })
 
 const mapDispatchToProps = {
     carregarListaLanches,
     selecionarLanche,
-    mudarVisibilidadeCriacao
+    mudarVisibilidadeCriacao,
+    carregarListaIngredientes
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cardapio)

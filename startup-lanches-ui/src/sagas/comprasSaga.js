@@ -42,7 +42,7 @@ function* comprarLanche(action) {
 function* carregarListaCompras() {
     try {
         const result = yield call(ComprasService.carregarListaCompras)
-        console.log('result do ', result)
+
         if (result.success) {
             result.data.sort((a, b) => b.id - a.id);
             yield put(carregouListaCompras({ compras: result.data }))
